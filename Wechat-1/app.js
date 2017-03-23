@@ -24,10 +24,10 @@ app.use(async function (ctx, next) {
     var sha = sha1(str)
 
     if (sha === signature){
-        this.body = echostr + ''
+        ctx.body = echostr + ''
     }
     else {
-        this.body = 'wrong'
+        ctx.body = 'wrong'
     }
 });
 

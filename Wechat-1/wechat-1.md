@@ -5,11 +5,12 @@
 #### 1.2 本地测试阶段时可以通过ngrok 搭建本地服务器以充作应用服务器
 ![图 1.2](http://upload-images.jianshu.io/upload_images/704770-9cadc93efadff902.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-   `npm install -g loacltunnel` 安装localtunnel 映射工具
-    `python -m SimpleHttpSever 3100` 通过python 开启一个本地服务
+   >`npm install -g loacltunnel` 安装localtunnel 映射工具
+   
+   >`python -m SimpleHttpSever 3100` 通过python 开启一个本地服务
 
 ![图 1.3](http://upload-images.jianshu.io/upload_images/704770-ff6d4d42d73c7417.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240) 
-   `lt --port 端口号` 通过localtunnel 工具把服务影射到外网
+   >`lt --port 端口号` 通过localtunnel 工具把服务影射到外网
 
 ![图 1.4](http://upload-images.jianshu.io/upload_images/704770-789b3693acde6fb2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 

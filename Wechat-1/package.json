@@ -1,0 +1,27 @@
+{
+  "name": "wechat",
+  "version": "1.0.0",
+  "description": "the first day code.",
+  "main": "app.js",
+  "dependencies": {
+    "koa": "^2.2.0",
+    "sha1": ""
+  },
+  "devDependencies": {
+    "koa": "^2.2.0",
+    "sha1": ""
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spursy/WeChat.git"
+  },
+  "author": "spursy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spursy/WeChat/issues"
+  },
+  "homepage": "https://github.com/spursy/WeChat#readme"
+}

@@ -1,6 +1,7 @@
 'use strict'
+const Koa = require('koa');
+const app = new Koa();
 
-var Koa = require('koa')
 var sha1 = require('sha1')
 var config = {
     wechat: {
@@ -8,13 +9,11 @@ var config = {
         appSecret: 'e0eac8fcaca226c23d94ca379aab77aa',
         token: 'gufanyuanyingbikongjin'
     
-}
+    }
 }
 
-var app = new Koa()
-
-app.use(function *(next) {
-    console.log(this.query)
+app.use(async function (ctx, next) {
+     console.log(this.query)
     var token = config.wechat.token
     var signature = this.query.signature
     var nonce = this.query.nonce
@@ -30,7 +29,7 @@ app.use(function *(next) {
     else {
         this.body = 'wrong'
     }
-})
+});
 
 app.listen(1234)
 console.log('listening: 1234')

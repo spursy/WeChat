@@ -13,12 +13,13 @@ var config = {
 }
 
 app.use(async function (ctx, next) {
-     console.log(this.query)
+    // console.log(ctx)
+    console.log(ctx.query)
     var token = config.wechat.token
-    var signature = this.query.signature
-    var nonce = this.query.nonce
-    var timestamp = this.query.timestamp
-    var echostr = this.query.echostr
+    var signature = ctx.query.signature
+    var nonce = ctx.query.nonce
+    var timestamp = ctx.query.timestamp
+    var echostr = ctx.query.echostr
 
     var str = [token, timestamp, nonce].sort().join('')
     var sha = sha1(str)
@@ -31,5 +32,5 @@ app.use(async function (ctx, next) {
     }
 });
 
-app.listen(1234)
-console.log('listening: 1234')
+app.listen(3721)
+console.log('listening: 3721')

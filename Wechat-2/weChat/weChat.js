@@ -1,5 +1,6 @@
 var sha1 = require('sha1')
 var Promise = require('bluebird')
+var getRawBody = require('raw-body')
 var request = Promise.promisify(require('request'))
 var prefix = 'https://api.weixin.qq.com/cgi-bin/'
 var api = {
@@ -66,7 +67,7 @@ WeChat.prototype.isValidAccessToken = function (data) {
     }
 }
 
-module.exports =  function (ctx, params) {
+module.exports = async function (ctx, params) {
         var weCHat = new WeChat(params)
         var token = params.token
         var signature = ctx.query.signature
@@ -76,12 +77,29 @@ module.exports =  function (ctx, params) {
         var str = [token, timestamp, nonce].sort().join('')
         var sha = sha1(str)
 
-        if (sha === signature){
-            ctx.body = echostr + ''
-        }
-        else {
-            ctx.body = 'wrong'
-        }
+        if (this.method === 'GET') {
+            if (sha === signature){
+                ctx.body = echostr + ''
+            }
+            else {
+                ctx.body = 'wrong'
+            }
+        } else if (this.method === 'POST') {
+            if (sha !== signature){
+                ctx.body = 'wrong'
+                return false
+            }
+            return new Promise(function(resolve, reject){
+                resolve('2x')
+            });
+            var data =  await getRawBody(this.req, {
+                length: this.length,
+                limit: '1mb',
+                encoding: this.charset
+            })
+
+            console.log(data);
+        }        
 }
 
 

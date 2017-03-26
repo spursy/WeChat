@@ -29,6 +29,7 @@ app.use(async function (ctx, next) {
     // })
     weChat(ctx, config.wechat);
     //await next(weChat(ctx, next, config.wechat));
+    
 });
 
 app.listen(1234)

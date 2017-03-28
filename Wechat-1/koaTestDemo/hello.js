@@ -14,9 +14,17 @@ app.use(async function (ctx, next) {
 //Middleware 2
 app.use(async function (ctx, next) {
    return new Promise (function (resolve, reject) {
-       resolve("Spursyy")
+       console.log("2.1");
+       var name = setTimeout(getName, 5000);
+       console.log("2.2")
+       resolve("name")
+       console.log("2.3")
    })
 })
+
+function getName() {
+    return "Spursy";
+}
 
 app.listen(3000);
 console.log("port 3000 was start!")

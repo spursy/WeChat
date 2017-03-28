@@ -71,7 +71,6 @@ WeChat.prototype.isValidAccessToken = function (data) {
 
 module.exports = function (params) {
         return async function(ctx, next) {
-                //     console.log(3)
                     var weCHat = new WeChat(params)
                     var token = params.token
                     var signature = ctx.query.signature
@@ -80,14 +79,7 @@ module.exports = function (params) {
                     var echostr = ctx.query.echostr
                     var str = [token, timestamp, nonce].sort().join('')
                     var sha = sha1(str)
-                //     if (sha === signature){
-                //             ctx.body = echostr + ''
-                //         }
-                //         else {
-                //             ctx.body = 'wrong'
-                //         }
-                // await next();
-                    console.log(ctx.method)
+
                     if (ctx.method === 'GET') {
                         if (sha === signature){
                             ctx.body = echostr + ''
@@ -105,12 +97,9 @@ module.exports = function (params) {
                             limit: '1mb',
                             encoding: this.charset
                         })
+                        var content = await xmlUtil.parseXMLAsync(data)
 
-                        console.log("data ++ " + data )
-                        var content = xmlUtil.parseXMLAsync(data)
-                        console.log("content ++ " + content)
-
-                         var message = xmlUtil.formatMessage(content) 
+                         var message = await xmlUtil.formatMessage(content.xml) 
                         // console.log("message ++ " + message);
                         if (message.msgType === 'event') {
                             if (message.Event === 'subscribe') {
@@ -118,7 +107,7 @@ module.exports = function (params) {
 
                                 that.status = 200
                                 that.type = 'application/xml'
-                                that.body = 
+                                that.body = '<xml><ToUserName><![CDATA['+toUser+']]></ToUserName><FromUserName><![CDATA['+fromUser+']]></FromUserName><CreateTime>new Date().getDate()</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[你好]]></Content></xml>'
                             }
                         }
                     }  

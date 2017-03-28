@@ -3,9 +3,11 @@ var Promise = require('bluebird')
 var getRawBody = require('raw-body')
 var request = Promise.promisify(require('request'))
 var prefix = 'https://api.weixin.qq.com/cgi-bin/'
+var xmlUtil = require('../util/xmlUtil')
 var api = {
 	access_token: prefix + 'token?grant_type=client_credential'
 }
+
 
 function WeChat(opts) {
     this.getAccessToken = opts.getAccessToken
@@ -67,39 +69,51 @@ WeChat.prototype.isValidAccessToken = function (data) {
     }
 }
 
-module.exports = async function (ctx, params) {
-        var weCHat = new WeChat(params)
-        var token = params.token
-        var signature = ctx.query.signature
-        var nonce = ctx.query.nonce
-        var timestamp = ctx.query.timestamp
-        var echostr = ctx.query.echostr
-        var str = [token, timestamp, nonce].sort().join('')
-        var sha = sha1(str)
+module.exports = function (params) {
+        return async function(ctx, next) {
+                //     console.log(3)
+                    var weCHat = new WeChat(params)
+                    var token = params.token
+                    var signature = ctx.query.signature
+                    var nonce = ctx.query.nonce
+                    var timestamp = ctx.query.timestamp
+                    var echostr = ctx.query.echostr
+                    var str = [token, timestamp, nonce].sort().join('')
+                    var sha = sha1(str)
+                //     if (sha === signature){
+                //             ctx.body = echostr + ''
+                //         }
+                //         else {
+                //             ctx.body = 'wrong'
+                //         }
+                // await next();
+                    console.log(ctx.method)
+                    if (ctx.method === 'GET') {
+                        if (sha === signature){
+                            ctx.body = echostr + ''
+                        }
+                        else {
+                            ctx.body = 'wrong'
+                        }
+                    } else if (ctx.method === 'POST') {
+                        if (sha !== signature){
+                            ctx.body = 'wrong'
+                            return false
+                        }
+                        var data =  await getRawBody(ctx.req, {
+                            length: this.length,
+                            limit: '1mb',
+                            encoding: this.charset
+                        })
 
-        if (this.method === 'GET') {
-            if (sha === signature){
-                ctx.body = echostr + ''
-            }
-            else {
-                ctx.body = 'wrong'
-            }
-        } else if (this.method === 'POST') {
-            if (sha !== signature){
-                ctx.body = 'wrong'
-                return false
-            }
-            return new Promise(function(resolve, reject){
-                resolve('2x')
-            });
-            var data =  await getRawBody(this.req, {
-                length: this.length,
-                limit: '1mb',
-                encoding: this.charset
-            })
+                        console.log("data ++ " + data )
+                        var content = xmlUtil.parseXMLAsync(data)
+                        console.log("content ++ " + content)
 
-            console.log(data);
-        }        
+                        // var message = xmlUtil.formatMessage(content) 
+                        // console.log("message ++ " + message);
+                    }  
+        }      
 }
 
 

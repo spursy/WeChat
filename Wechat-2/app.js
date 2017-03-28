@@ -19,18 +19,12 @@ var config = {
         }
     }
 }
-app.use(async function (ctx, next) {
-    // var p = new Promise(function (resovle, reject) {
-    //     resolve(ctx, config.wechat);
-    // });
-    // p.then(weChat())
-    // .catch(function (err) {
-    //     console.log(err);
-    // })
-    weChat(ctx, config.wechat);
-    //await next(weChat(ctx, next, config.wechat));
-    
-});
+// app.use(async function (ctx, next) {
+//     console.log(1)
+//     await weChat(config.wechat);
+// });
+
+app.use(weChat(config.wechat))
 
 app.listen(1234)
 console.log('listening: 1234')

@@ -110,8 +110,17 @@ module.exports = function (params) {
                         var content = xmlUtil.parseXMLAsync(data)
                         console.log("content ++ " + content)
 
-                        // var message = xmlUtil.formatMessage(content) 
+                         var message = xmlUtil.formatMessage(content) 
                         // console.log("message ++ " + message);
+                        if (message.msgType === 'event') {
+                            if (message.Event === 'subscribe') {
+                                var now = new Date().getTime()
+
+                                that.status = 200
+                                that.type = 'application/xml'
+                                that.body = 
+                            }
+                        }
                     }  
         }      
 }

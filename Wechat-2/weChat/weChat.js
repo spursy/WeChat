@@ -1,6 +1,7 @@
 var sha1 = require('sha1')
 var Promise = require('bluebird')
 var getRawBody = require('raw-body')
+var util = requore('../util/xmlUtil')
 var request = Promise.promisify(require('request'))
 var prefix = 'https://api.weixin.qq.com/cgi-bin/'
 var xmlUtil = require('../util/xmlUtil')
@@ -69,6 +70,16 @@ WeChat.prototype.isValidAccessToken = function (data) {
     }
 }
 
+WeChat.prototype.reply = function () {
+    var content = this.body
+    var message = this.weixin
+    var xml = util.tpl =(content, message)
+
+    this.status = 200
+    this.type = 'application/xml'
+    this.body = xml
+}
+
 module.exports = function (params) {
         return async function(ctx, next) {
                     var weCHat = new WeChat(params)
@@ -98,18 +109,23 @@ module.exports = function (params) {
                             encoding: this.charset
                         })
                         var content = await xmlUtil.parseXMLAsync(data)
+                        console.log(content.xml)
+                         var mes = await xmlUtil.formatMessage(content.xml)
+                         console.log("message ++ " + mes);
+                        // if (mes.MsgType === 'event') {
+                        //     if (mes.Event === 'subscribe') {
+                        //         var now = new Date().getTime()
 
-                         var message = await xmlUtil.formatMessage(content.xml) 
-                        // console.log("message ++ " + message);
-                        if (message.msgType === 'event') {
-                            if (message.Event === 'subscribe') {
-                                var now = new Date().getTime()
+                        //         ctx.status = 200
+                        //         ctx.type = 'application/xml'
+                        //         ctx.body = '<xml><ToUserName><![CDATA['+mes.FromUserName+']]></ToUserName><FromUserName><![CDATA['+mes.ToUserName+']]></FromUserName><CreateTime>new Date().getDate()</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[你好 ' +'我的萌小点， 么么哒'+ ']]></Content></xml>'
+                        //     }
+                        // }
 
-                                that.status = 200
-                                that.type = 'application/xml'
-                                that.body = '<xml><ToUserName><![CDATA['+toUser+']]></ToUserName><FromUserName><![CDATA['+fromUser+']]></FromUserName><CreateTime>new Date().getDate()</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[你好]]></Content></xml>'
-                            }
-                        }
+                        this.weixin = mes
+                        yield handler.call(this, next)
+                        wechat.reply.call(this)
+
                     }  
         }      
 }

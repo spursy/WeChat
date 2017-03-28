@@ -4,6 +4,7 @@ const app = new Koa();
 var util = require('./util/util')
 var path = require('path')
 var weChat = require('./weChat/weChat')
+var weXin = require('./weiXin')
 var fpath = path.join(__dirname, './config/wechat.txt')
 
 var config = {
@@ -24,7 +25,7 @@ var config = {
 //     await weChat(config.wechat);
 // });
 
-app.use(weChat(config.wechat))
+app.use(weChat(config.wechat, weXin.reply))
 
 app.listen(1234)
 console.log('listening: 1234')

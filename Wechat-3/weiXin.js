@@ -1,6 +1,6 @@
-exports.reply = function * (next) {
+exports.reply = async function (next) {
     var message = this.weixin
-
+ 
     if (message.MsgType === 'event') {
         if (message.Event === 'subscribe') {
             if (message.EventKey) {
@@ -11,8 +11,9 @@ exports.reply = function * (next) {
             console.log('无情取关')
             this.body = ''
         }
+         this.body = '12312'
     } else {
-
+         this.body = '12312'
     }
-    yield next
+    await next
 }

@@ -69,19 +69,20 @@ WeChat.prototype.isValidAccessToken = function (data) {
     }
 }
 
-WeChat.prototype.reply = function () {
+WeChat.prototype.reply = async function (ctx, next) {
     var content = this.body
     var message = this.weixin
-    var xml = xmlUtil.tpl =(content, message)
+    var xml = await xmlUtil.tpl(content, message)
 
-    this.status = 200
-    this.type = 'application/xml'
-    this.body = xml
+    ctx.status = 200
+    ctx.type = 'application/xml'
+    ctx.body = xml
+    await next
 }
 
-module.exports = function (params， handler) {
+module.exports = function (params, handler) {
         return async function(ctx, next) {
-                    var weCHat = new WeChat(params)
+                    var weChat = new WeChat(params)
                     var token = params.token
                     var signature = ctx.query.signature
                     var nonce = ctx.query.nonce
@@ -107,22 +108,13 @@ module.exports = function (params， handler) {
                             limit: '1mb',
                             encoding: this.charset
                         })
+                        
                         var content = await xmlUtil.parseXMLAsync(data)
                         console.log(content.xml)
                          var mes = await xmlUtil.formatMessage(content.xml)
-                         console.log("message ++ " + mes);
-                        // if (mes.MsgType === 'event') {
-                        //     if (mes.Event === 'subscribe') {
-                        //         var now = new Date().getTime()
-
-                        //         ctx.status = 200
-                        //         ctx.type = 'application/xml'
-                        //         ctx.body = '<xml><ToUserName><![CDATA['+mes.FromUserName+']]></ToUserName><FromUserName><![CDATA['+mes.ToUserName+']]></FromUserName><CreateTime>new Date().getDate()</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[你好 ' +'我的萌小点， 么么哒'+ ']]></Content></xml>'
-                        //     }
-                        // }
                         this.weixin = mes
                         await handler.call(this, next)
-                        wechat.reply.call(this)
+                        await weChat.reply.call(this,ctx, next)
                     }  
         }      
 }

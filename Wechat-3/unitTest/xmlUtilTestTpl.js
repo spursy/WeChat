@@ -3,8 +3,8 @@
 var content = "Hello Word"
 var message = {FromUserName: "WeChat", ToUserName: "Spursyy"}
 
-console.log(message)
+// console.log(message)
 
-// var xml = xmlUtil.tpl(content, message)
+var xml = xmlUtil.tpl(content, message)
 
-// console.log(xml)
+console.log(xml)

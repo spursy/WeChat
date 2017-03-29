@@ -20,7 +20,6 @@ exports.parseXMLAsync = function(xml) {
 function formatMessage(result) {
     var message = {};
     if (typeof result === 'object') {
-        console.log("1 " + result)
         var keys = Object.keys(result)
         for (var i = 0; i < keys.length; i++) {            
             var item = result[keys[i]]
@@ -56,10 +55,9 @@ function formatMessage(result) {
 exports.formatMessage = formatMessage
 
 exports.tpl = function(content, message) {
-    console.log(1)
     var info = {}
     var type = 'text'
-    var formUserName = message.FromUserName
+    var fromUserName = message.FromUserName
     var toUserName = message.ToUserName
 
     if (Array.isArray(content)) {
@@ -73,6 +71,5 @@ exports.tpl = function(content, message) {
     info.toUserName = fromUserName
     info.fromUserName = toUserName
 
-    console.log('Info ' + info)
-    // return tpl.complied(info)
+    return tpl.compiled(info)
 }

@@ -22,6 +22,18 @@ var tpl = heredoc(function() {/*
           <%} else if (msgType === 'shortvideo') {%>  
             <MediaId><![CDATA[<%= content.media_id%>]]></MediaId>
             <ThumbMediaId><![CDATA[<%= content.thumb_media_id%>]]></ThumbMediaId>     
+        <%} else if (msgType === 'news') {%> 
+            <ArticleCount><%= content.length%></ArticleCount>
+            <Articles>
+                <% content.forEach(function(item) {%>
+                        <item>
+                                <Title><![CDATA[<%= item.title%>]]></Title> 
+                                <Description><![CDATA[<%= item.description%>]]></Description>
+                                <PicUrl><![CDATA[<%= item.picUrl%>]]></PicUrl>
+                                <Url><![CDATA[<%= item.url%>]]></Url>
+                        </item>
+                <% })%>
+            </Articles>
         <%} %>   
         <MsgId>1234567890123456</MsgId>
     </xml>

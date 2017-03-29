@@ -1,9 +1,12 @@
 var Promise = require('bluebird')
 var request = Promise.promisify(require('request'))
 var xmlUtil = require('../util/xmlUtil')
+var fs = require('fs')
 var prefix = 'https://api.weixin.qq.com/cgi-bin/'
 var api = {
-	access_token: prefix + 'token?grant_type=client_credential'
+	access_token: prefix + 'token?grant_type=client_credential',
+    upload: prefix + 'media/upload?'
+    // https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE
 }
 
 function WeChatPublic(opts) {
@@ -11,25 +14,7 @@ function WeChatPublic(opts) {
     this.saveAccessToken = opts.saveAccessToken
     this.appID = opts.appID
     this.appSecret = opts.appSecret
-    var that = this
-    opts.getAccessToken()
-        .then(function(data) {
-            try {
-                data = JSON.parse(data)
-            }
-            catch(e) {
-                that.updateAccessToken()
-            }
-            if (that.isValidAccessToken(data))
-                return Promise.resolve(data)
-            else
-                return that.updateAccessToken()
-        })
-        .then(function(data) {
-            that.access_token = data.access_token
-            that.expires_in = data.expires_in
-            that.saveAccessToken(data)
-        })
+    this.fetchAccessToken()
 }
 
 WeChatPublic.prototype.updateAccessToken = function () {
@@ -46,6 +31,58 @@ WeChatPublic.prototype.updateAccessToken = function () {
             data.expires_in = expires_in;
             resolve(data);
         }) ;
+    });
+}
+
+WeChatPublic.prototype.fetchAccessToken = function () {
+    var that = this
+    if (this.access_token && this.expires_in) {
+        if (this.isValidAccessToken(this)) {
+            return Promise.resolve(this)
+        }
+    }
+    that.getAccessToken() 
+        .then(function(data) {
+            try {
+                data = JSON.parse(data)
+            }
+            catch(e) {
+                that.updateAccessToken()
+            }
+            if (that.isValidAccessToken(data))
+                return Promise.resolve(data)
+            else
+                return that.updateAccessToken()
+        })
+        .then(function(data) {
+            that.access_token = data.access_token
+            that.expires_in = data.expires_in
+            that.saveAccessToken(data)
+            return Promise.resolve(data)
+        }) 
+}
+
+WeChatPublic.prototype.uploadMaterial = function (type, filepath) {
+    var that = this
+    var form = {
+        media: fs.createReadStream(filepath)
+    }
+    return new Promise(function(resolve, reject) {
+        that.fetchAccessToken()
+            .then(function(data) {
+                var url = api.upload + '&access_token=' +data.access_token+ '&type=' +type;
+                request({method: 'POST', url: url, formData: form, JSON: true})     .then(function (response) {          
+                        var _data = response[1];
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            var err = new Error('Upload materials failed')
+                            reject(err)
+                        }
+                    })
+            }).catch(function (err) {
+                        retject(err)
+            }) ;
     });
 }
 

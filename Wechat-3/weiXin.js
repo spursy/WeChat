@@ -1,3 +1,7 @@
+var config = require('./config')
+var weChatPublic = require('./weChat/weChatPublic')
+var weChatApi = new weChatPublic(config.weChat)
+
 exports.reply = async function (next) {
     var message = this.weixin
  
@@ -38,6 +42,13 @@ exports.reply = async function (next) {
                 description: "这只是描述而已",
                 picUrl: "http://upload-images.jianshu.io/upload_images/704770-b1bcc834295b02c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
            }]
+         } else if (content === '5') {
+            var data = await weChatApi.uploadMaterial('image', __dirname + '/2.png')
+
+            reply = {
+                type: 'image',
+                mediaId: data.media_id
+            }
          }
          this.body = reply
     }

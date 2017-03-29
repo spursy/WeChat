@@ -10,8 +10,8 @@
     "request": "",
     "raw-body": "",
     "xml2js": "",
-    'ejs': "",
-    'heredoc': ""
+    "ejs": "",
+    "heredoc": ""
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

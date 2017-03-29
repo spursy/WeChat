@@ -1,6 +1,6 @@
 var xml2js = require('xml2js')
 var promise = require('bluebird')
-var tpl = reuire('./tpl')
+var tpl = require('./tpl')
 
 exports.parseXMLAsync = function(xml) {
     return new Promise(function(resolve, reject) {
@@ -56,6 +56,7 @@ function formatMessage(result) {
 exports.formatMessage = formatMessage
 
 exports.tpl = function(content, message) {
+    console.log(1)
     var info = {}
     var type = 'text'
     var formUserName = message.FromUserName
@@ -72,5 +73,6 @@ exports.tpl = function(content, message) {
     info.toUserName = fromUserName
     info.fromUserName = toUserName
 
-    return tpl.complied(info)
+    console.log('Info ' + info)
+    // return tpl.complied(info)
 }

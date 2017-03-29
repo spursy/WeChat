@@ -54,7 +54,6 @@ WeChat.prototype.updateAccessToken = function () {
 }
 
 WeChat.prototype.isValidAccessToken = function (data) {
-
     if (!data || !data.access_token || !data.expires_in) {
         return false;
     }

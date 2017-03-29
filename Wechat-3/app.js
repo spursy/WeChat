@@ -20,10 +20,6 @@ var config = {
         }
     }
 }
-// app.use(async function (ctx, next) {
-//     console.log(1)
-//     await weChat(config.wechat);
-// });
 
 app.use(weChat(config.wechat, weXin.reply))
 

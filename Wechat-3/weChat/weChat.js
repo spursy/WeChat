@@ -31,7 +31,8 @@ function WeChat(opts) {
         .then(function(data) {
             that.access_token = data.access_token
             that.expires_in = data.expires_in
-
+            console.log(2)
+            console.log(data.access_token)
             that.saveAccessToken(data)
         })
 }
@@ -110,7 +111,6 @@ module.exports = function (params, handler) {
                         })
                         
                         var content = await xmlUtil.parseXMLAsync(data)
-                        console.log(content.xml)
                          var mes = await xmlUtil.formatMessage(content.xml)
                         this.weixin = mes
                         await handler.call(this, next)

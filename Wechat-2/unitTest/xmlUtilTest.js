@@ -3,18 +3,17 @@ var xml1 = "<xml><ToUserName>Spursyy</ToUserName><FromUserName>WeiChat</FromUser
 var xml2 = "<xml><ToUserName><![CDATA[Spursy]]></ToUserName><FromUserName><![CDATA[WeiChat]]></FromUserName><CreateTime>123456789</CreateTime><MsgType><![CDATA[event]]></MsgType><Event><![CDATA[subscribe]]></Event></xml>"
 
 // Promise + Async fucvntion
-// xmlUtil.parseXMLAsync(xml2).then(function(data) {
-//     (async function() {
-//          console.log(data)
-//          console.log(1)
-//          var mes = await xmlUtil.formatMessage(data.xml)
-//          console.log(2)
-//          await console.log(mes);
-//     })()
-    
-// }).catch(function(err) {
-//     console.log(err)
-// })
+xmlUtil.parseXMLAsync(xml2).then(function(data) {
+    (async function() {
+         console.log(data)
+         console.log(1)
+         var mes = await xmlUtil.formatMessage(data.xml)
+         console.log(2)
+         await console.log(mes);
+    })()
+}).catch(function(err) {
+    console.log(err)
+})
 
 // Async + Async function
 async function getValue() {
@@ -27,7 +26,6 @@ async function getValue() {
 getValue().catch(function(err) {
     console.log(err)
 })
-
 
 // validation formatMessage method.
 var oj = {ToUsrName: ['123'], 

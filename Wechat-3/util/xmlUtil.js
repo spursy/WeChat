@@ -11,12 +11,6 @@ exports.parseXMLAsync = function(xml) {
     })
 }
 
-// async function parseXMLAsync (xml) {
-//     await xml2js.parseString(xml, {trim: true}, function(err, content) {
-//         return content;
-//     })
-// }
-
 function formatMessage(result) {
     var message = {};
     if (typeof result === 'object') {

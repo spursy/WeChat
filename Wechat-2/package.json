@@ -9,9 +9,7 @@
     "bluebird": "",
     "request": "",
     "raw-body": "",
-    "xml2js": "",
-    'ejs': "",
-    'heredoc': ""
+    "xml2js": ""
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

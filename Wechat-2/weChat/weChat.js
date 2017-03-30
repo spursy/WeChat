@@ -8,7 +8,6 @@ var api = {
 	access_token: prefix + 'token?grant_type=client_credential'
 }
 
-
 function WeChat(opts) {
     this.getAccessToken = opts.getAccessToken
     this.saveAccessToken = opts.saveAccessToken
@@ -57,10 +56,8 @@ WeChat.prototype.isValidAccessToken = function (data) {
     if (!data || !data.access_token || !data.expires_in) {
         return false;
     }
-
     var expires_in = data.expires_in;
     var now = (new Date().getDate());
-
     if (now < expires_in) {
         return true;
     } else {
@@ -72,7 +69,6 @@ WeChat.prototype.reply = function () {
     var content = this.body
     var message = this.weixin
     var xml = xmlUtil.tpl =(content, message)
-
     this.status = 200
     this.type = 'application/xml'
     this.body = xml
@@ -88,7 +84,6 @@ module.exports = function (params， handler) {
                     var echostr = ctx.query.echostr
                     var str = [token, timestamp, nonce].sort().join('')
                     var sha = sha1(str)
-
                     if (ctx.method === 'GET') {
                         if (sha === signature){
                             ctx.body = echostr + ''
@@ -107,21 +102,16 @@ module.exports = function (params， handler) {
                             encoding: this.charset
                         })
                         var content = await xmlUtil.parseXMLAsync(data)
-                        console.log(content.xml)
                          var mes = await xmlUtil.formatMessage(content.xml)
-                         console.log("message ++ " + mes);
-                        // if (mes.MsgType === 'event') {
-                        //     if (mes.Event === 'subscribe') {
-                        //         var now = new Date().getTime()
+                        if (mes.MsgType === 'event') {
+                            if (mes.Event === 'subscribe') {
+                                var now = new Date().getTime()
 
-                        //         ctx.status = 200
-                        //         ctx.type = 'application/xml'
-                        //         ctx.body = '<xml><ToUserName><![CDATA['+mes.FromUserName+']]></ToUserName><FromUserName><![CDATA['+mes.ToUserName+']]></FromUserName><CreateTime>new Date().getDate()</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[你好 ' +'我的萌小点， 么么哒'+ ']]></Content></xml>'
-                        //     }
-                        // }
-                        this.weixin = mes
-                        await handler.call(this, next)
-                        wechat.reply.call(this)
+                                ctx.status = 200
+                                ctx.type = 'application/xml'
+                                ctx.body = '<xml><ToUserName><![CDATA['+mes.FromUserName+']]></ToUserName><FromUserName><![CDATA['+mes.ToUserName+']]></FromUserName><CreateTime>new Date().getDate()</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[你好 ' +'我的萌小点， 么么哒'+ ']]></Content></xml>'
+                            }
+                        }
                     }  
         }      
 }

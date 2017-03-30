@@ -1,7 +1,6 @@
 'use strict'
 const Koa = require('koa');
 const app = new Koa();
-
 var sha1 = require('sha1')
 var config = {
     wechat: {
@@ -11,7 +10,6 @@ var config = {
     
     }
 }
-
 app.use(async function (ctx, next) {
     // console.log(ctx)
     console.log(ctx.query)

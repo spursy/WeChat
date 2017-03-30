@@ -8,7 +8,7 @@ exports.reply = async function (next) {
     if (message.MsgType === 'event') {
         if (message.Event === 'subscribe') {
             if (message.EventKey) {
-                console.log('Scan code:')
+                console.log('Scan code:')  
             }
             console.log('1' + message.MsgId)
             this.body = '哈哈哈， 你订阅了\r\n' + '消息ID：'

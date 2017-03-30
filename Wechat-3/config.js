@@ -1,7 +1,5 @@
 var util = require('./util/util')
 var path = require('path')
-var weChat = require('./weChat/weChat')
-var weXin = require('./weiXin')
 var fpath = path.join(__dirname, './config/wechat.txt')
 
 var config = {
@@ -18,4 +16,4 @@ var config = {
     }
 }
 
-module.exports = config
+module.exports.config = config

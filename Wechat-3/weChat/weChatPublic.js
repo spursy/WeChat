@@ -9,12 +9,14 @@ var api = {
     // https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE
 }
 
-function WeChatPublic(opts) {
+var WeChatPublic = function WeChatPublic(opts) {
+    
     this.getAccessToken = opts.getAccessToken
     this.saveAccessToken = opts.saveAccessToken
+    this.fetchAccessToken()
     this.appID = opts.appID
     this.appSecret = opts.appSecret
-    this.fetchAccessToken()
+    
 }
 
 WeChatPublic.prototype.updateAccessToken = function () {
@@ -41,7 +43,7 @@ WeChatPublic.prototype.fetchAccessToken = function () {
             return Promise.resolve(this)
         }
     }
-    that.getAccessToken() 
+    return that.getAccessToken() 
         .then(function(data) {
             try {
                 data = JSON.parse(data)
@@ -68,10 +70,10 @@ WeChatPublic.prototype.uploadMaterial = function (type, filepath) {
         media: fs.createReadStream(filepath)
     }
     return new Promise(function(resolve, reject) {
-        that.fetchAccessToken()
+         that.fetchAccessToken()
             .then(function(data) {
                 var url = api.upload + '&access_token=' +data.access_token+ '&type=' +type;
-                request({method: 'POST', url: url, formData: form, JSON: true})     .then(function (response) {          
+                request({method: 'POST', url: url, formData: form, JSON: true}).then(function (response) {          
                         var _data = response[1];
                         if (_data) {
                             resolve(_data)

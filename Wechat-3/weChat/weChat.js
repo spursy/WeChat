@@ -1,11 +1,11 @@
 var sha1 = require('sha1')
 var getRawBody = require('raw-body')
-var weChatClass = require('./weChatPublic')
+var weChatPublic = require('./weChatPublic')
 var xmlUtil = require('../util/xmlUtil')
 
 module.exports = function (params, handler) {
         return async function(ctx, next) {
-                    var weChat = new weChatClass(params)
+                    var weChat = new weChatPublic(params)
                     var token = params.token
                     var signature = ctx.query.signature
                     var nonce = ctx.query.nonce
@@ -36,7 +36,7 @@ module.exports = function (params, handler) {
                          var mes = await xmlUtil.formatMessage(content.xml)
                         this.weixin = mes
                         await handler.call(this, next)
-                        await weChat.reply.call(this,ctx, next)
+                        await weChatPublic.reply.call(this, ctx, next)
                     }  
         }      
 }

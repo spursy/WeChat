@@ -1,6 +1,6 @@
 var config = require('./config')
 var weChatPublic = require('./weChat/weChatPublic')
-var weChatApi = new weChatPublic(config.weChat)
+var weChatApi = new weChatPublic(config.config.weChat)
 
 exports.reply = async function (next) {
     var message = this.weixin
@@ -44,12 +44,15 @@ exports.reply = async function (next) {
            }]
          } else if (content === '5') {
             var data = await weChatApi.uploadMaterial('image', __dirname + '/2.png')
-
-            reply = {
-                type: 'image',
-                mediaId: data.media_id
+            console.log(data)
+            data = JSON.parse(data)
+            console.log(data)
+            reply = await  {
+                "type": 'image',
+                "mediaid": data.media_id
             }
          }
+
          this.body = reply
     }
     await next

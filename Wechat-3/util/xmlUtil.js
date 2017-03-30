@@ -57,13 +57,17 @@ exports.tpl = function(content, message) {
     if (Array.isArray(content)) {
         type = 'news'
     }
-
     type = content.type || type
     info.content = content
     info.createTime = new Date().getTime()
     info.msgType = type
     info.toUserName = fromUserName
     info.fromUserName = toUserName
+    
+    if (type === 'image') {
+        info.mediaid = content.mediaid
+    }
+    console.log('media123123' + info.mediaid)
 
     return tpl.compiled(info)
 }

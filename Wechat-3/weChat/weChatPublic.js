@@ -73,8 +73,8 @@ WeChatPublic.prototype.uploadMaterial = function (type, filepath) {
          that.fetchAccessToken()
             .then(function(data) {
                 var url = api.upload + '&access_token=' +data.access_token+ '&type=' +type;
-                request({method: 'POST', url: url, formData: form, JSON: true}).then(function (response) {          
-                        var _data = response[1];
+                request({method: 'POST', url: url, formData: form, JSON: true}).then(function (response) {                                  
+                        var _data = response.body;
                         if (_data) {
                             resolve(_data)
                         } else {
@@ -108,7 +108,7 @@ WeChatPublic.prototype.reply = async function (ctx, next) {
     var content = this.body
     var message = this.weixin
     var xml = await xmlUtil.tpl(content, message)
-
+    console.log('1234xml' + xml)
     ctx.status = 200
     ctx.type = 'application/xml'
     ctx.body = xml

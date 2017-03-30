@@ -36,7 +36,7 @@ module.exports = function (params, handler) {
                          var mes = await xmlUtil.formatMessage(content.xml)
                         this.weixin = mes
                         await handler.call(this, next)
-                        await weChatPublic.reply.call(this, ctx, next)
+                        await weChat.reply.call(this, ctx, next)
                     }  
         }      
 }

@@ -74,7 +74,7 @@ WeChat.prototype.reply = function () {
     this.body = xml
 }
 
-module.exports = function (params， handler) {
+module.exports = function (params) {
         return async function(ctx, next) {
                     var weCHat = new WeChat(params)
                     var token = params.token

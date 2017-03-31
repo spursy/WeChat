@@ -18,14 +18,14 @@ var tpl = heredoc(function() {/*
                 <MediaId><![CDATA[<%= mediaid%>]]></MediaId>
             </Image>
          <%} else if (msgType === 'voice') {%>
-            <MediaId><![CDATA[<%= content.media_id%>]]></MediaId>
+            <MediaId><![CDATA[<%= content.mediaid%>]]></MediaId>
             <Format><![CDATA[<%= content.format%>]]></Format>
           <%} else if (msgType === 'video') {%>
-              <MediaId><![CDATA[<%= content.media_id%>]]></MediaId>
-            <ThumbMediaId><![CDATA[<%= content.thumb_media_id%>]]></ThumbMediaId>
+              <MediaId><![CDATA[<%= content.mediaid%>]]></MediaId>
+            <ThumbMediaId><![CDATA[<%= content.thumbmediaid%>]]></ThumbMediaId>
           <%} else if (msgType === 'shortvideo') {%>  
-            <MediaId><![CDATA[<%= content.media_id%>]]></MediaId>
-            <ThumbMediaId><![CDATA[<%= content.thumb_media_id%>]]></ThumbMediaId>     
+            <MediaId><![CDATA[<%= content.mediaid%>]]></MediaId>
+            <ThumbMediaId><![CDATA[<%= content.thumbmediaid%>]]></ThumbMediaId>     
         <%} else if (msgType === 'news') {%> 
             <ArticleCount><%= content.length%></ArticleCount>
             <Articles>

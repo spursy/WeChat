@@ -30,8 +30,8 @@ function WeChat(opts) {
         .then(function(data) {
             that.access_token = data.access_token
             that.expires_in = data.expires_in
-
-            that.saveAccessToken(data)
+            var tokenData = JSON.stringify(data)
+            that.saveAccessToken(tokenData)
         })
 }
 
@@ -46,7 +46,7 @@ WeChat.prototype.updateAccessToken = function () {
             var data = response.body;
             data = JSON.parse(data)
             var now = (new Date().getTime());
-            var expires_in = now + (data.expires_in - 20) ;
+            var expires_in = now + (data.expires_in - 20) * 1000 ;
             data.expires_in = expires_in;
             resolve(data);
         }) ;

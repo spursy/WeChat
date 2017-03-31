@@ -67,7 +67,8 @@ WeChatPublic.prototype.fetchAccessToken = function () {
             that.expires_in = data.expires_in
             console.log('saveAccessToken::::::')
             console.log(data)
-            that.saveAccessToken(data)
+            var tokenData = JSON.stringify(data)
+            that.saveAccessToken(tokenData)
             return Promise.resolve(data)
         }) 
 }

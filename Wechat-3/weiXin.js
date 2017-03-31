@@ -44,9 +44,7 @@ exports.reply = async function (next) {
            }]
          } else if (content === '5') {
             var data = await weChatApi.uploadMaterial('image', __dirname + '/2.png')
-            console.log(data)
             data = JSON.parse(data)
-            console.log(data)
             reply = await  {
                 "type": 'image',
                 "mediaid": data.media_id

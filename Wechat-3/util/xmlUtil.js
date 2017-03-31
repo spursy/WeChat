@@ -67,7 +67,6 @@ exports.tpl = function(content, message) {
     if (type === 'image') {
         info.mediaid = content.mediaid
     }
-    console.log('media123123' + info.mediaid)
 
     return tpl.compiled(info)
 }

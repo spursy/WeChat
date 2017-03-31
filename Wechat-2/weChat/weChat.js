@@ -44,8 +44,9 @@ WeChat.prototype.updateAccessToken = function () {
         request({url: url, JSON: true}).then(function (response) {
           
             var data = response.body;
+            data = JSON.parse(data)
             var now = (new Date().getTime());
-            var expires_in = now + (data.expires_in - 20) * 1000;
+            var expires_in = now + (data.expires_in - 20) ;
             data.expires_in = expires_in;
             resolve(data);
         }) ;

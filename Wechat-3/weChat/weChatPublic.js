@@ -9,14 +9,12 @@ var api = {
     // https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE
 }
 
-var WeChatPublic = function WeChatPublic(opts) {
-    
+var WeChatPublic = function WeChatPublic(opts) {   
     this.getAccessToken = opts.getAccessToken
     this.saveAccessToken = opts.saveAccessToken
-    this.fetchAccessToken()
     this.appID = opts.appID
     this.appSecret = opts.appSecret
-    
+    this.fetchAccessToken()
 }
 
 WeChatPublic.prototype.updateAccessToken = function () {
@@ -28,9 +26,16 @@ WeChatPublic.prototype.updateAccessToken = function () {
         request({url: url, JSON: true}).then(function (response) {
           
             var data = response.body;
+            data = JSON.parse(data)
             var now = (new Date().getTime());
-            var expires_in = now + (data.expires_in - 20) * 1000;
+             console.log('updateAccessToken:')
+             console.log("now" + now)
+            console.log(data.expires_in - 20)
+            var expires_in = now + (data.expires_in -20)* 1000;
+           
+            console.log(expires_in)
             data.expires_in = expires_in;
+            console.log(data)
             resolve(data);
         }) ;
     });
@@ -47,6 +52,7 @@ WeChatPublic.prototype.fetchAccessToken = function () {
         .then(function(data) {
             try {
                 data = JSON.parse(data)
+                console.log('getAccessToken'+ data)
             }
             catch(e) {
                 that.updateAccessToken()
@@ -59,9 +65,27 @@ WeChatPublic.prototype.fetchAccessToken = function () {
         .then(function(data) {
             that.access_token = data.access_token
             that.expires_in = data.expires_in
+            console.log('saveAccessToken::::::')
+            console.log(data)
             that.saveAccessToken(data)
             return Promise.resolve(data)
         }) 
+}
+
+WeChatPublic.prototype.isValidAccessToken = function (data) {
+    if (!data || !data.access_token || !data.expires_in) {
+        return false;
+    }
+    var expires_in = data.expires_in;
+    var now = (new Date().getDate());
+    console.log('isValidAccessToken')
+    console.log(expires_in)
+    console.log(now)
+    if (now < expires_in) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 WeChatPublic.prototype.uploadMaterial = function (type, filepath) {
@@ -86,22 +110,6 @@ WeChatPublic.prototype.uploadMaterial = function (type, filepath) {
                         retject(err)
             }) ;
     });
-}
-
-WeChatPublic.prototype.isValidAccessToken = function (data) {
-
-    if (!data || !data.access_token || !data.expires_in) {
-        return false;
-    }
-
-    var expires_in = data.expires_in;
-    var now = (new Date().getDate());
-
-    if (now < expires_in) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 WeChatPublic.prototype.reply = async function (ctx, next) {

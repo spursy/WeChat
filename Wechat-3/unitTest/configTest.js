@@ -11,13 +11,20 @@ var image = {"type":"image","media_id":"M2D_1pj4mvQJp6KANDJfB-ygcgV2R6TRwlUkynDY
 // var media_id = image.media_id
 // var type = image.type
 
-var buffer= JSON.stringify(image)
-//new Buffer(image); 
-util.writeFileAsync(fpath, buffer).then(function(data) {
-  cosnsole.log(data)
-})
+// var buffer= JSON.stringify(image)
+// //new Buffer(image); 
+// util.writeFileAsync(fpath, buffer).then(function(data) {
+//   cosnsole.log(data)
+// })
 
-util.readFileAsync(fpath).then(function(data){
-  console.log('read File')
-  console.log(JSON.parse(data).type)
-})
+// util.readFileAsync(fpath).then(function(data){
+//   console.log('read File')
+//   console.log(JSON.parse(data).type)
+// })
+
+var date = new Date();
+console.log(date)
+
+var data = date.getTime()
+console.log(data)
+

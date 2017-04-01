@@ -17,30 +17,6 @@ var WeChatPublic = function WeChatPublic(opts) {
     this.fetchAccessToken()
 }
 
-WeChatPublic.prototype.updateAccessToken = function () {
-    var appID = this.appID;
-    var appSecret = this.appSecret;
-    var url = api.access_token + '&appid=' +appID+ '&secret=' +appSecret;
-
-    return new Promise(function(resolve, reject) {
-        request({url: url, JSON: true}).then(function (response) {
-          
-            var data = response.body;
-            data = JSON.parse(data)
-            var now = (new Date().getTime());
-             console.log('updateAccessToken:')
-             console.log("now" + now)
-            console.log(data.expires_in - 20)
-            var expires_in = now + (data.expires_in -20)* 1000;
-           
-            console.log(expires_in)
-            data.expires_in = expires_in;
-            console.log(data)
-            resolve(data);
-        }) ;
-    });
-}
-
 WeChatPublic.prototype.fetchAccessToken = function () {
     var that = this
     if (this.access_token && this.expires_in) {
@@ -50,23 +26,29 @@ WeChatPublic.prototype.fetchAccessToken = function () {
     }
     return that.getAccessToken() 
         .then(function(data) {
+            var objData
             try {
-                data = JSON.parse(data)
-                console.log('getAccessToken'+ data)
+                objData = JSON.parse(data)
+                console.log(objData)
             }
             catch(e) {
+                console.log('Parse access token to JS object failed'+ e)
                 that.updateAccessToken()
             }
-            if (that.isValidAccessToken(data))
-                return Promise.resolve(data)
-            else
-                return that.updateAccessToken()
+
+            if (that.isValidAccessToken(objData)) {
+                 console.log('access taken validation is true.')
+                 return Promise.resolve(objData)
+            }  
+            else {
+                console.log('access taken validation is false, then update access token.')
+                 return that.updateAccessToken()
+            }
         })
         .then(function(data) {
+            console.log("save new access token in config.txt")
             that.access_token = data.access_token
             that.expires_in = data.expires_in
-            console.log('saveAccessToken::::::')
-            console.log(data)
             var tokenData = JSON.stringify(data)
             that.saveAccessToken(tokenData)
             return Promise.resolve(data)
@@ -78,10 +60,7 @@ WeChatPublic.prototype.isValidAccessToken = function (data) {
         return false;
     }
     var expires_in = data.expires_in;
-    var now = (new Date().getDate());
-    console.log('isValidAccessToken')
-    console.log(expires_in)
-    console.log(now)
+    var now = (new Date().getTime());
     if (now < expires_in) {
         return true;
     } else {
@@ -89,17 +68,39 @@ WeChatPublic.prototype.isValidAccessToken = function (data) {
     }
 }
 
+WeChatPublic.prototype.updateAccessToken = function () {
+    var appID = this.appID;
+    var appSecret = this.appSecret;
+    var url = api.access_token + '&appid=' +appID+ '&secret=' +appSecret;
+
+    return new Promise(function(resolve, reject) {
+        request({url: url, JSON: true}).then(function (response) {
+            var data = response.body;
+            data = JSON.parse(data)
+            var now = (new Date().getTime());
+            console.log(data.expires_in - 20)
+            var expires_in = now + (data.expires_in -20)* 1000;
+           
+            data.expires_in = expires_in;
+            resolve(data);
+        }) ;
+    });
+}
+
 WeChatPublic.prototype.uploadMaterial = function (type, filepath) {
     var that = this
     var form = {
         media: fs.createReadStream(filepath)
+       
     }
     return new Promise(function(resolve, reject) {
          that.fetchAccessToken()
             .then(function(data) {
                 var url = api.upload + '&access_token=' +data.access_token+ '&type=' +type;
-                request({method: 'POST', url: url, formData: form, JSON: true}).then(function (response) {                                  
+                console.log('UploadMaterialUrl:' + url )
+                request({method: 'POST', url: url, formData: form, JSON: true}).then(function (response) {                   
                         var _data = response.body;
+                        console.log("responseData:"+ _data)
                         if (_data) {
                             resolve(_data)
                         } else {
@@ -108,6 +109,7 @@ WeChatPublic.prototype.uploadMaterial = function (type, filepath) {
                         }
                     })
             }).catch(function (err) {
+                        console.log(err)
                         retject(err)
             }) ;
     });
@@ -117,7 +119,7 @@ WeChatPublic.prototype.reply = async function (ctx, next) {
     var content = this.body
     var message = this.weixin
     var xml = await xmlUtil.tpl(content, message)
-    console.log('1234xml' + xml)
+    console.log('xmlDetail' + xml)
     ctx.status = 200
     ctx.type = 'application/xml'
     ctx.body = xml

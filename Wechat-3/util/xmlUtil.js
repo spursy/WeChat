@@ -66,7 +66,9 @@ exports.tpl = function(content, message) {
     
     if (type === 'image') {
         info.mediaid = content.mediaid
+    } else if (type === "music") {
+        info.thumbMediaid = content.thumbMediaid
     }
-
+    console.log('InfoMessage'+ JSON.stringify(info))
     return tpl.compiled(info)
 }

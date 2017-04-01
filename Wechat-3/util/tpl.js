@@ -12,7 +12,7 @@ var tpl = heredoc(function() {/*
             <Content><![CDATA[<%= content%>]]></Content>
         <%} else if (msgType === 'text') {%>
             <PicUrl><![CDATA[<%= content.url%>]></PicUrl>
-            <MediaId><![CDATA[<%= content.media_id%>]]></MediaId>
+            <MediaId><![CDATA[<%= content.mediaid%>]]></MediaId>
          <%} else if (msgType === 'image') {%>
             <Image>
                 <MediaId><![CDATA[<%= mediaid%>]]></MediaId>
@@ -21,8 +21,11 @@ var tpl = heredoc(function() {/*
             <MediaId><![CDATA[<%= content.mediaid%>]]></MediaId>
             <Format><![CDATA[<%= content.format%>]]></Format>
           <%} else if (msgType === 'video') {%>
-              <MediaId><![CDATA[<%= content.mediaid%>]]></MediaId>
-            <ThumbMediaId><![CDATA[<%= content.thumbmediaid%>]]></ThumbMediaId>
+              <Video>
+                    <MediaId><![CDATA[<%= content.mediaid%>]]></MediaId>
+                    <Title><![CDATA[<%=content.title%>]]></Title>
+                    <Description><![CDATA[<%=content.description%>]]></Description>
+             </Video>
           <%} else if (msgType === 'shortvideo') {%>  
             <MediaId><![CDATA[<%= content.mediaid%>]]></MediaId>
             <ThumbMediaId><![CDATA[<%= content.thumbmediaid%>]]></ThumbMediaId>     
@@ -38,10 +41,18 @@ var tpl = heredoc(function() {/*
                         </item>
                 <% })%>
             </Articles>
+        <%} else if (msgType === 'music') {%> 
+             <Music>
+                    <Title><![CDATA[<%= content.title%>]]></Title>
+                    <Description><![CDATA[<%= content.description%>]]></Description>
+                    <MusicUrl><![CDATA[<%= content.musicUrl%>]]></MusicUrl>
+                    <ThumbMediaId><![CDATA[<%= content.thumbMediaid%>]]></ThumbMediaId>
+            </Music>
         <%} %>   
-        <MsgId>1234567890123456</MsgId>
     </xml>
  */})
+
+
 
  var compiled = ejs.compile(tpl)
 

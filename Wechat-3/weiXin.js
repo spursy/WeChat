@@ -49,8 +49,28 @@ exports.reply = async function (next) {
                 "type": 'image',
                 "mediaid": data.media_id
             }
+         } else if (content === '6') {
+              var data = await weChatApi.uploadMaterial('video', __dirname + '/lake.mp4')
+              data = JSON.parse(data)
+              console.log('AfterUploadMaterial'+ data.media_id)
+            reply = await  {
+                "type": 'video',
+                "mediaid": data.media_id,
+                "title": "Du shu lake",
+                "description": "I like du shu lake"
+            }
+         } else if (content === '7') {
+              var data = await weChatApi.uploadMaterial('image', __dirname + '/2.png')
+              data = JSON.parse(data)
+              console.log('AfterUploadMaterial'+ data.media_id)
+            reply = await  {
+                "type": 'music',
+                "description": "I love music",
+                "title": "一起摇摆",
+                "musicUrl": "http://bd.kuwo.cn/yinyue/6820326?from=baidu",
+                "thumbMediaid": data.media_id
+            }
          }
-
          this.body = reply
     }
     await next

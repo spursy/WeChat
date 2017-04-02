@@ -11,7 +11,8 @@
     "raw-body": "",
     "xml2js": "",
     "ejs": "",
-    "heredoc": ""
+    "heredoc": "",
+    "lodash": ""
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

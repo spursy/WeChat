@@ -70,6 +70,24 @@ exports.reply = async function (next) {
                 "musicUrl": "http://bd.kuwo.cn/yinyue/6820326?from=baidu",
                 "thumbMediaid": data.media_id
             }
+         }else if (content === '8') {
+              var data = await weChatApi.uploadMaterial('image', __dirname + '/2.png', {type: 'image'})
+              data = JSON.parse(data)
+              console.log('AfterUploadMaterial::::::'+ data.media_id)
+            reply = await  {
+                "type": 'image',
+                "mediaid": data.media_id
+            }
+         }else if (content === '9') {
+              var data = await weChatApi.uploadMaterial('video', __dirname + '/lake.mp4', {type: "video", description: '{"title": "Really a nice place.", "introduction": "Never think it so easy."}'})
+              data = JSON.parse(data)
+              console.log('AfterUploadMaterial::::::'+ data.media_id)
+            reply = await  {
+                "type": 'video',
+                "title": "一起摇摆",
+                "description": "我是谁",
+                "mediaid": data.media_id
+            }
          }
          this.body = reply
     }

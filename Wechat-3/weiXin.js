@@ -102,7 +102,7 @@ exports.reply = async function (next) {
                       cotent_source_url: "https://github.com/spursy/WeChat"
                   }]
               }
-              data = await weChatApi.uploadMaterial("news", media, {})
+              data = await weChatApi.uploadMaterial("news", JSON.stringify(media), {})
               data = await weChatApi.fetchMaterial(data.media_id)
               
               var item = data.news_item

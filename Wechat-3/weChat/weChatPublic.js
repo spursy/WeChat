@@ -5,7 +5,7 @@ var fs = require('fs')
 var _ = require('lodash')
 var prefix = 'https://api.weixin.qq.com/cgi-bin/'
 var api = {
-	access_token: prefix + 'token?grant_type=client_credential',
+	accessToken: prefix + 'token?grant_type=client_credential',
     temporary: {
         upload: prefix + 'media/upload?',
         fetch: prefix + 'media/get?'
@@ -16,7 +16,9 @@ var api = {
         uploadNews:prefix + 'material/add_news?',
         uploadNewsPic:prefix + 'media/uploadimg?',
         del: prefix + 'meia/del_material?',
-        update: prefix + 'meia/update_news?'
+        update: prefix + 'meia/update_news?',
+        count: prefix + 'material/get_materialcount?',
+        batch: prefix + 'material/batchget_material?'
     }    
 }
 
@@ -126,7 +128,7 @@ WeChatPublic.prototype.uploadMaterial = function (type, material, permanent) {
                 if (!permanent) {
                     url += '&type=' + type
                 } else {
-                    form.access_token = data.access_token
+                    form.access_token = data.access_token.toString()
                 }
                 var options = {
                     method: "POST",
@@ -139,6 +141,9 @@ WeChatPublic.prototype.uploadMaterial = function (type, material, permanent) {
                     options.formData = form
                 }
                 // request({method: 'POST', url: url, formData: form, JSON: true})
+
+                console.log("URL:::::::::::" + url)
+
                 request(options).then(function (response) {                   
                         var _data = response.body;
                         console.log("responseData:"+ _data)
@@ -221,6 +226,61 @@ WeChatPublic.prototype.updateMaterial = function (mediaId, news) {
                     url: url,
                     JSON: true,
                     body: form
+                }
+                request(options).then(function (response) {                   
+                        var _data = response.body;
+                        console.log("responseData:"+ _data)
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            var err = new Error('Upload materials failed')
+                            reject(err)
+                        }
+                    })
+            })    
+    });
+}
+
+WeChatPublic.prototype.countMaterial = function () {
+    var that = this
+
+    return new Promise(function(resolve, reject) {
+         that.fetchAccessToken()
+            .then(function(data) {
+                var url = api.permanent.count + 'access_token=' +data.access_token 
+                var options = {
+                    method: "GET",
+                    url: url,
+                    JSON: true
+                }
+                request(options).then(function (response) {                   
+                        var _data = response.body;
+                        console.log("responseData:"+ _data)
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            var err = new Error('Upload materials failed')
+                            reject(err)
+                        }
+                    })
+            })    
+    });
+}
+
+WeChatPublic.prototype.batchMaterial = function (paramOptions) {
+    var that = this
+    paramOptions.type = paramOptions.type || type
+    paramOptions.offset = paramOptions.offset || 0
+    paramOptions.count = paramOptions.count || 1
+    return new Promise(function(resolve, reject) {
+         that.fetchAccessToken()
+            .then(function(data) {
+                var url = api.permanent.count + 'access_token=' +data.access_token 
+                var options = {
+                    method: "POST",
+                    url: url,
+                    body: paramOptions,
+                    JSON: true
                 }
                 request(options).then(function (response) {                   
                         var _data = response.body;

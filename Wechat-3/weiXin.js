@@ -88,6 +88,34 @@ exports.reply = async function (next) {
                 "description": "我是谁",
                 "mediaid": data.media_id
             }
+         } else if (content === '10') {
+               var picData = await weChatApi.uploadMaterial('image', __dirname + '/2.png', {})
+              picData = JSON.parse(picData)
+              var media = {
+                  articles: [{
+                      title: "Spursy",
+                      thumbMediaId: picData.media_id,
+                      author: "Spursyy",
+                      digest: "没有摘要",
+                      show_cover_pic: 1,
+                      content: "没有内容",
+                      cotent_source_url: "https://github.com/spursy/WeChat"
+                  }]
+              }
+              data = await weChatApi.uploadMaterial("news", media, {})
+              data = await weChatApi.fetchMaterial(data.media_id)
+              
+              var item = data.news_item
+              var news = []
+              item.forEach(function(item) {
+                    news.push({
+                        title: item.title,
+                        description: item.digest,
+                        picUrl: picData.url,
+                        url: item.url
+                    })
+              })
+              reply = mews
          }
          this.body = reply
     }

@@ -1,13 +1,15 @@
 var xmlUtil = require('../util/xmlUtil')
 var xml1 = "<xml><ToUserName>Spursyy</ToUserName><FromUserName>WeiChat</FromUserName><CreateTime>123456789</CreateTime><MsgType>event</MsgType><Event>subscribe</Event></xml>"
-var xml2 = "<xml><ToUserName><![CDATA[{name1: [Spursy], name2: [YY], name3: [Spursyy]}]]></ToUserName><FromUserName><![CDATA[WeiChat]]></FromUserName><CreateTime>123456789</CreateTime><MsgType><![CDATA[event]]></MsgType><Event><![CDATA[subscribe]]></Event></xml>"
+var xml2 = "<xml><ToUserName><name1>Spursyy</name1> <name2>YY</name2></ToUserName><FromUserName><![CDATA[WeiChat]]></FromUserName><CreateTime>123456789</CreateTime><MsgType><![CDATA[event]]></MsgType><Event><![CDATA[subscribe]]></Event></xml>"
 
 // Promise + Async fucvntion
 xmlUtil.parseXMLAsync(xml2).then(function(data) {
     (async function() {
+        console.log(data)
          var mes = await xmlUtil.formatMessage(data.xml)
          console.log(mes)
          var mes1 = mes.ToUserName
+         console.log(mes1)
          console.log("length " + mes1.length)
          await console.log(typeof mes1 === 'object')
          console.log(mes1)
@@ -19,12 +21,6 @@ xmlUtil.parseXMLAsync(xml2).then(function(data) {
     console.log(err)
 })
 
-var obj = "{name1: 'Spursy', name2: 'YY', name3: 'Spursyy'}"
-console.log(typeof obj === 'object')
-obj = JSON.stringify(obj)
-console.log(typeof obj === 'object')
-obj = JSON.parse(obj)
-console.log(typeof obj === 'object')
 
 // console.log("3")
 // console.log(typeof ["Spursy, YY, Spursyy"] === 'object')

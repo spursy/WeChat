@@ -14,6 +14,7 @@ function formatMessage(result) {
     var message = {};
     if (typeof result === 'object') {
         var keys = Object.keys(result)
+        console.log(keys)
         for (var i = 0; i < keys.length; i++) {            
             var item = result[keys[i]]
             var key = keys[i];
@@ -23,7 +24,6 @@ function formatMessage(result) {
             }
             if (item.length === 1) {
                 var val = item[0]
-
                 if (typeof val === 'object') {
                     message[key] = formatMessage(val)
                 }
@@ -31,6 +31,7 @@ function formatMessage(result) {
                     message[key] = (val || '')
                 }
             } else {
+                
                 message[key] = []
 
                 for (var j = 0, k = item.length; j < k; j++) {

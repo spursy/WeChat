@@ -32,9 +32,13 @@ module.exports = function (params, handler) {
                             encoding: this.charset
                         })
                         
+                        // Get response data from XML.
                         var content = await xmlUtil.parseXMLAsync(data)
-                         var mes = await xmlUtil.formatMessage(content.xml)
+                        // Transform response data to JS object.
+                        var mes = await xmlUtil.formatMessage(content.xml)
+
                         this.weixin = mes
+                        // Call WeiXin.reply(), organize response data.
                         await handler.call(this, next)
                         await weChat.reply.call(this, ctx, next)
                     }  

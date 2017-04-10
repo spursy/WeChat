@@ -2,6 +2,9 @@ var config = require('./config')
 var weChatPublic = require('./weChat/weChatPublic')
 var weChatApi = new weChatPublic(config.config.weChat)
 
+/**
+ * 
+ */
 exports.reply = async function (next) {
     var message = this.weixin
  
@@ -105,9 +108,9 @@ exports.reply = async function (next) {
               data = await weChatApi.uploadMaterial("news", JSON.stringify(media), {})
               data = await weChatApi.fetchMaterial(data.media_id)
               
-              var item = data.news_item
+              var items = data.news_item
               var news = []
-              item.forEach(function(item) {
+              items.forEach(function(item) {
                     news.push({
                         title: item.title,
                         description: item.digest,

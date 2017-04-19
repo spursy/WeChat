@@ -116,6 +116,27 @@ exports.reply = async function (next) {
                     })
               })
               reply = mews
+         } else  if (content === '12'){
+            var group = await weChatApi.createGroup('weChat')
+            console.log('新分组 weChat')
+            console.log(group)
+            var fetchGroups = await weChatApi.fetchGroups()
+            console.log('加了分组列表')
+            console.log(fetchGroups)
+
+            var groupID = await weChatApi.checkGroup(message.FromUserName)
+            console.log('查看自己的分组')
+            console.log(groupID)   
+
+            var result = await weChatApi.moveGroup(message.FromUserName, 100)
+            console.log('移动后的分组')
+            console.log(result)
+
+            var groupMoved = await weChatApi.checkGroup(message.FromUserName)
+            console.log('移动后我的当前分组')
+            console.log(groupMoved)
+
+            reply = 'Group done'
          }
          this.body = reply
     }

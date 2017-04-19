@@ -19,7 +19,16 @@ var api = {
         update: prefix + 'meia/update_news?',
         count: prefix + 'material/get_materialcount?',
         batch: prefix + 'material/batchget_material?'
-    }    
+    },
+    group: {
+        create: prefix + 'groups/create?',
+        fetch: prefix + 'groups/get?',
+        check: prefix + 'groups/getid?',
+        update: prefix + 'groups/update?',
+        move: prefix + 'groups/members/update?',
+        batchUpdate: prefix + 'groups/members/batchupdate?',
+        del: prefix + 'groups/delete?',
+    }   
 }
 
 var WeChatPublic = function WeChatPublic(opts) {   
@@ -294,6 +303,166 @@ WeChatPublic.prototype.batchMaterial = function (paramOptions) {
                     })
             })    
     });
+}
+
+WeChatPublic.prototype.createGroup = function(name) {
+    var that = this;
+
+    return new Promise(function(resolve, reject) {
+        that.fetchAccessToken()
+            .then(function(data) {
+                var url = api.group.create + 'access_token=' + data.access_token
+                var options = {
+                    group: {
+                        name: name
+                    }
+                }
+
+                request({method: 'POST', url: url, body: options, json: true})
+                    .then(function(response) {
+                        var _data = response.body
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            throw new Error("Create group failed.")
+                        }
+                    }).catch(function(err) {
+                        resolve(err)
+                    }) 
+            })
+    }) 
+}
+
+WeChatPublic.prototype.fetchGroups = function() {
+    var that = this;
+
+    return new Promise(function(resolve, reject) {
+        that.fetchAccessToken()
+            .then(function(data) {
+                var url = api.group.fetch + 'access_token=' + data.access_token
+
+                request({url: url, json: true})
+                    .then(function(response) {
+                        var _data = response.body
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            throw new Error("Fetch group failed.")
+                        }
+                    }).catch(function(err) {
+                        resolve(err)
+                    }) 
+            })
+    }) 
+}
+
+WeChatPublic.prototype.checkGroup = function(openID) {
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.fetchAccessToken()
+            .then(function(data) {
+                var url = api.group.check + 'access_token=' + data.access_token
+                var options = {
+                    openid: openID
+                }
+
+                request({method: 'POST', url: url, body: options, json: true})
+                    .then(function(response) {
+                        var _data = response.body
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            throw new Error("Check group failed.")
+                        }
+                    }).catch(function(err) {
+                        resolve(err)
+                    }) 
+            })
+    }) 
+}
+
+WeChatPublic.prototype.updateGroup = function(openID, name) {
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.fetchAccessToken()
+            .then(function(data) {
+                var url = api.group.update + 'access_token=' + data.access_token
+                var options = {
+                    group: {
+                        id: openID,
+                        name: name
+                    }
+                }
+                request({method: 'POST', url: url, body: options, json: true})
+                    .then(function(response) {
+                        var _data = response.body
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            throw new Error("Update group failed.")
+                        }
+                    }).catch(function(err) {
+                        resolve(err)
+                    }) 
+            })
+    }) 
+}
+
+WeChatPublic.prototype.moveGroup = function(openIDs, to) {
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.fetchAccessToken()
+            .then(function(data) {
+                var url = api.group.move + 'access_token=' + data.access_token
+                var options = {
+                    to_groupid: to 
+                }
+                if (_.isArray(openIDs)) {
+                     url = api.group.batchMoveGroup + 'access_token=' + data.access_token;
+                     options.openid_lists = openIDs;
+                } else {
+                    url = api.group.move + 'access_token=' + data.access_token;
+                    options.openid = openIDs;
+                }
+                request({method: 'POST', url: url, body: options, json: true})
+                    .then(function(response) {
+                        var _data = response.body
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            throw new Error("Move group failed.")
+                        }
+                    }).catch(function(err) {
+                        resolve(err)
+                    }) 
+            })
+    }) 
+}
+
+WeChatPublic.prototype.deleteGroup = function(id) {
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.fetchAccessToken()
+            .then(function(data) {
+                var url = api.group.deleteGroup + 'access_token=' + data.access_token
+                var options = {
+                    group: {
+                        id: id
+                    }
+                }
+                request({method: 'POST', url: url, body: options, json: true})
+                    .then(function(response) {
+                        var _data = response.body
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            throw new Error("Delete group failed.")
+                        }
+                    }).catch(function(err) {
+                        resolve(err)
+                    }) 
+            })
+    }) 
 }
 
 WeChatPublic.prototype.reply = async function (ctx, next) {

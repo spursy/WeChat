@@ -44,6 +44,11 @@ var WeChatPublic = function WeChatPublic(opts) {
     this.fetchAccessToken()
 }
 
+/**
+ * featch access token
+ * if access token is outdated, then update access token.
+ * return valid access token.
+ */
 WeChatPublic.prototype.fetchAccessToken = function () {
     var that = this
     if (this.access_token && this.expires_in) {
@@ -82,6 +87,10 @@ WeChatPublic.prototype.fetchAccessToken = function () {
         }) 
 }
 
+/**
+ * varify access token
+ * expire in date must bigger than now.
+ */
 WeChatPublic.prototype.isValidAccessToken = function (data) {
     if (!data || !data.access_token || !data.expires_in) {
         return false;
@@ -95,6 +104,10 @@ WeChatPublic.prototype.isValidAccessToken = function (data) {
     }
 }
 
+/**
+ * update access token
+ * request wechat serve to get new access token.
+ */
 WeChatPublic.prototype.updateAccessToken = function () {
     var appID = this.appID;
     var appSecret = this.appSecret;
@@ -114,6 +127,10 @@ WeChatPublic.prototype.updateAccessToken = function () {
     });
 }
 
+/**
+ * upload material 
+ * upload meterial to WeChat serve.
+ */
 WeChatPublic.prototype.uploadMaterial = function (type, material, permanent) {
     var that = this
     var form = {}
@@ -533,6 +550,7 @@ WeChatPublic.prototype.fetchUsers = function(openIDs, lang) {
 WeChatPublic.prototype.reply = async function (ctx, next) {
     var content = this.body
     var message = this.weixin
+    // formate reply xml, then response to WeiChat serve.
     var xml = await xmlUtil.tpl(content, message)
     console.log('xmlDetail' + xml)
     ctx.status = 200

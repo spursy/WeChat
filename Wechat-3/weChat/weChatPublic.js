@@ -28,6 +28,11 @@ var api = {
         move: prefix + 'groups/members/update?',
         batchUpdate: prefix + 'groups/members/batchupdate?',
         del: prefix + 'groups/delete?',
+    },
+    user: {
+        remark: prefix + 'user/info/updateremark?',
+        fetch: prefix + 'user/info?',
+        batchFetch: prefix + 'user/info/batchget?'
     }   
 }
 
@@ -460,6 +465,66 @@ WeChatPublic.prototype.deleteGroup = function(id) {
                         }
                     }).catch(function(err) {
                         resolve(err)
+                    }) 
+            })
+    }) 
+}
+
+WeChatPublic.prototype.remarkUser = function(openID, remark) {
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.fetchAccessToken()
+            .then(function(data) {
+                var url = api.user.remark + 'access_token=' + data.access_token
+                var options = {
+                    openid: openID,
+                    remark: remark
+                }
+                request({method: 'POST', url: url, body: options, json: true})
+                    .then(function(response) {
+                        var _data = response.body
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            throw new Error("remark user failed.")
+                        }
+                    }).catch(function(err) {
+                        reject(err)
+                    }) 
+            })
+    }) 
+}
+
+WeChatPublic.prototype.fetchUsers = function(openIDs, lang) {
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.fetchAccessToken()
+            .then(function(data) {
+                var lang = lang || "zh_CN"
+                 var options = {
+                    json: true
+                }
+                if(_.isArray(openIDs)) {
+                     options.url = api.user.batchFetch + 'access_token=' + data.access_token
+                     options.form = {
+                        user_list: openIDs
+                    }
+                    options.method = 'POST'
+                } else {
+                     options.url = api.user.fetch + 'access_token=' + data.access_token + '&openid =' +openIDs+ '&lang=' + lang
+                }
+               
+                request(options)
+                    .then(function(response) {
+                        var _data = response.body
+                        if (_data) {
+                            console.log(_data)
+                            resolve(_data)
+                        } else {
+                            throw new Error("batch fetch failed.")
+                        }
+                    }).catch(function(err) {
+                        reject(err)
                     }) 
             })
     }) 

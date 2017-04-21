@@ -137,8 +137,20 @@ exports.reply = async function (next) {
             console.log(groupMoved)
 
             reply = 'Group done'
+         } else if (content === '13') {
+             console.log('From from from' + message.FromUserName)
+            var user = await weChatApi.fetchUsers(message.FromUserName, 'en')
+            console.log(user + '123456789')
+            var openIds = [
+                {
+                    openid: message.FromUserName,
+                    lang: 'en'
+                }
+            ]
+            var users = await weChatApi.fetchUsers(openIds)
+            console.log(users)
          }
          this.body = reply
-    }
+    } 
     await next
 }

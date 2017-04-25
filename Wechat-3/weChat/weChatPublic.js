@@ -33,6 +33,9 @@ var api = {
         remark: prefix + 'user/info/updateremark?',
         fetch: prefix + 'user/info?',
         batchFetch: prefix + 'user/info/batchget?'
+    },
+    mass: {
+        group: prefix + "message/mass/sendall?"
     }   
 }
 
@@ -171,13 +174,8 @@ WeChatPublic.prototype.uploadMaterial = function (type, material, permanent) {
                 } else {
                     options.formData = form
                 }
-                // request({method: 'POST', url: url, formData: form, JSON: true})
-
-                console.log("URL:::::::::::" + url)
-
                 request(options).then(function (response) {                   
                         var _data = response.body;
-                        console.log("responseData:"+ _data)
                         if (_data) {
                             resolve(_data)
                         } else {
@@ -186,7 +184,6 @@ WeChatPublic.prototype.uploadMaterial = function (type, material, permanent) {
                         }
                     })
             }).catch(function (err) {
-                        console.log(err)
                         retject(err)
             }) ;
     });
@@ -208,7 +205,18 @@ WeChatPublic.prototype.fetchMaterial = function (mediaId, type, permanent) {
                     url = url.replace("https://", "http://")
                     url += '&type=' + type
                 } 
-                resolve(url)
+                var body = {
+                    "media_id" : mediaId
+                }
+                request({"method": "POST", "url": url, 'body': body, json: true}).then(function (response) {                   
+                        var _data = response.body;
+                        if (_data) {
+                            resolve(_data)
+                        } else {
+                            var err = new Error('Upload materials failed')
+                            reject(err)
+                        }
+                }) 
             })    
     });
 }
@@ -539,6 +547,42 @@ WeChatPublic.prototype.fetchUsers = function(openIDs, lang) {
                             resolve(_data)
                         } else {
                             throw new Error("batch fetch failed.")
+                        }
+                    }).catch(function(err) {
+                        reject(err)
+                    }) 
+            })
+    }) 
+}
+
+WeChatPublic.prototype.sendByGroup = function(type, message, groupID) {
+    var that = this;
+    var msg = { 
+        filter: {},
+        msgtype: type
+    }
+    msg[type] = message
+
+    if (!groupID) {
+        msg.filter.is_to_all = true
+    } else {
+        msg.filter = {
+            is_to_all: false,
+            group_id: groupID
+        }
+    }
+    return new Promise(function(resolve, reject) {
+        that.fetchAccessToken()
+            .then(function(data) {
+               var url = api.mass.group + 'access_token=' + data.access_token
+                request({method: "POST", url: url, body: msg, json: true})
+                    .then(function(response) {
+                        var _data = response.body
+                        if (_data) {
+                            console.log(_data)
+                            resolve(_data)
+                        } else {
+                            throw new Error("send group failed.")
                         }
                     }).catch(function(err) {
                         reject(err)

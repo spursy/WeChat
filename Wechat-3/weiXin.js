@@ -92,12 +92,12 @@ exports.reply = async function (next) {
                 "mediaid": data.media_id
             }
          } else if (content === '10') {
-               var picData = await weChatApi.uploadMaterial('image', __dirname + '/2.png', {})
-              picData = JSON.parse(picData)
+            var picData = await weChatApi.uploadMaterial('image', __dirname + '/2.png', {})
+            picData = JSON.parse(picData)
               var media = {
                   articles: [{
                       title: "Spursy",
-                      thumbMediaId: picData.media_id,
+                      thumb_media_id: picData.media_id,
                       author: "Spursyy",
                       digest: "没有摘要",
                       show_cover_pic: 1,
@@ -105,39 +105,41 @@ exports.reply = async function (next) {
                       cotent_source_url: "https://github.com/spursy/WeChat"
                   }]
               }
+              console.log(JSON.stringify(media))
               data = await weChatApi.uploadMaterial("news", JSON.stringify(media), {})
-              data = await weChatApi.fetchMaterial(data.media_id)
+            //   data = await weChatApi.fetchMaterial(data.media_id)
+              console.log("111111111111" + JSON.stringify(data))
               
-              var items = data.news_item
-              var news = []
-              items.forEach(function(item) {
-                    news.push({
-                        title: item.title,
-                        description: item.digest,
-                        picUrl: picData.url,
-                        url: item.url
-                    })
-              })
-              reply = mews
+            //   var items = data.news_item
+            //   var news = []
+            //   items.forEach(function(item) {
+            //         news.push({
+            //             title: item.title,
+            //             description: item.digest,
+            //             picUrl: picData.url,
+            //             url: item.url
+            //         })
+            //   })
+            //   reply = mews
          } else  if (content === '12'){
-            var group = await weChatApi.createGroup('weChat')
-            console.log('新分组 weChat')
-            console.log(group)
-            var fetchGroups = await weChatApi.fetchGroups()
-            console.log('加了分组列表')
-            console.log(fetchGroups)
+            // var group = await weChatApi.createGroup('weChat')
+            // console.log('新分组 weChat')
+            // console.log(group)
+            // var fetchGroups = await weChatApi.fetchGroups()
+            // console.log('加了分组列表')
+            // console.log(fetchGroups)
 
             var groupID = await weChatApi.checkGroup(message.FromUserName)
             console.log('查看自己的分组')
             console.log(groupID)   
 
-            var result = await weChatApi.moveGroup(message.FromUserName, 100)
-            console.log('移动后的分组')
-            console.log(result)
+            // var result = await weChatApi.moveGroup(message.FromUserName, 100)
+            // console.log('移动后的分组')
+            // console.log(result)
 
-            var groupMoved = await weChatApi.checkGroup(message.FromUserName)
-            console.log('移动后我的当前分组')
-            console.log(groupMoved)
+            // var groupMoved = await weChatApi.checkGroup(message.FromUserName)
+            // console.log('移动后我的当前分组')
+            // console.log(groupMoved)
 
             reply = 'Group done'
          } else if (content === '13') {
@@ -152,6 +154,13 @@ exports.reply = async function (next) {
             ]
             var users = await weChatApi.fetchUsers(openIds)
             console.log(users)
+         } else if (content ===  '15') { 
+            var mpnews = {
+                media_id: 'cEn1jwnodDYTi0fFJEOMIC4ATOPrxuc7_UHts0Qih-8'
+            }
+            var msgData = await weChatApi.sendByGroup('mpnews', mpnews, 0)
+            console.log(msgData)
+            reply = 'Yeah!'
          }
          this.body = reply
     } 

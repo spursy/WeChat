@@ -1,6 +1,21 @@
-var config = require('./config')
-var weChatPublic = require('./weChat/weChatPublic')
-var weChatApi = new weChatPublic(config.config.weChat)
+var config = require('./config');
+var weChatPublic = require('./weChat/weChatPublic');
+var weChatApi = new weChatPublic(config.config.weChat);
+var menu = require('./menu');
+var path = require('path');
+const materialPath = path.join(__dirname + '../materials');
+
+/**
+ * Add menu reference.
+ */
+weChatApi.deleteMenu()
+    .then(function(data) {
+        weChatApi.ceateMenu(menu)
+            .then(function(data) {
+                console.log(data);
+            })
+    })
+
 
 /**
  * 
@@ -46,14 +61,14 @@ exports.reply = async function (next) {
                 picUrl: "http://upload-images.jianshu.io/upload_images/704770-b1bcc834295b02c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
            }]
          } else if (content === '5') {
-            var data = await weChatApi.uploadMaterial('image', __dirname + '/2.png')
+            var data = await weChatApi.uploadMaterial('image', materialPath + '/2.png')
             data = JSON.parse(data)
             reply = await  {
                 "type": 'image',
                 "mediaid": data.media_id
             }
          } else if (content === '6') {
-              var data = await weChatApi.uploadMaterial('video', __dirname + '/lake.mp4')
+              var data = await weChatApi.uploadMaterial('video', materialPath + '/lake.mp4')
               data = JSON.parse(data)
               console.log('AfterUploadMaterial'+ data.media_id)
             reply = await  {
@@ -63,7 +78,7 @@ exports.reply = async function (next) {
                 "description": "I like du shu lake"
             }
          } else if (content === '7') {
-              var data = await weChatApi.uploadMaterial('image', __dirname + '/2.png')
+              var data = await weChatApi.uploadMaterial('image', materialPath + '/2.png')
               data = JSON.parse(data)
               console.log('AfterUploadMaterial'+ data.media_id)
             reply = await  {
@@ -162,7 +177,7 @@ exports.reply = async function (next) {
             console.log(msgData)
             reply = 'Yeah!'
          } else if (content === '16') {
-             
+
          }
 
          this.body = reply

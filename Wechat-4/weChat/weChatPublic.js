@@ -53,8 +53,7 @@ var WeChatPublic = function WeChatPublic(opts) {
     this.fetchAccessToken()
 }
 
-/**
- * featch access token
+/** featch access token
  * if access token is outdated, then update access token.
  * return valid access token.
  */
@@ -96,8 +95,7 @@ WeChatPublic.prototype.fetchAccessToken = function () {
         }) 
 }
 
-/**
- * varify access token
+/** varify access token
  * expire in date must bigger than now.
  */
 WeChatPublic.prototype.isValidAccessToken = function (data) {
@@ -113,8 +111,7 @@ WeChatPublic.prototype.isValidAccessToken = function (data) {
     }
 }
 
-/**
- * update access token
+/** update access token
  * request wechat serve to get new access token.
  */
 WeChatPublic.prototype.updateAccessToken = function () {
@@ -136,8 +133,7 @@ WeChatPublic.prototype.updateAccessToken = function () {
     });
 }
 
-/**
- * upload material 
+/** upload material 
  * upload meterial to WeChat serve.
  */
 WeChatPublic.prototype.uploadMaterial = function (type, material, permanent) {
@@ -195,6 +191,9 @@ WeChatPublic.prototype.uploadMaterial = function (type, material, permanent) {
     });
 }
 
+/** featch materials
+ * 
+ */
 WeChatPublic.prototype.fetchMaterial = function (mediaId, type, permanent) {
     var that = this
     var form = {}
@@ -227,6 +226,9 @@ WeChatPublic.prototype.fetchMaterial = function (mediaId, type, permanent) {
     });
 }
 
+/** delete materials
+ * 
+ */
 WeChatPublic.prototype.deleteMaterial = function (mediaId) {
     var that = this
     var form = {
@@ -256,6 +258,9 @@ WeChatPublic.prototype.deleteMaterial = function (mediaId) {
     });
 }
 
+/** update materials
+ * 
+ */
 WeChatPublic.prototype.updateMaterial = function (mediaId, news) {
     var that = this
     var form = {
@@ -286,6 +291,9 @@ WeChatPublic.prototype.updateMaterial = function (mediaId, news) {
     });
 }
 
+/** count materials
+ * 
+ */
 WeChatPublic.prototype.countMaterial = function () {
     var that = this
 
@@ -312,6 +320,9 @@ WeChatPublic.prototype.countMaterial = function () {
     });
 }
 
+/** batch materials
+ * 
+ */
 WeChatPublic.prototype.batchMaterial = function (paramOptions) {
     var that = this
     paramOptions.type = paramOptions.type || type
@@ -341,6 +352,9 @@ WeChatPublic.prototype.batchMaterial = function (paramOptions) {
     });
 }
 
+/** create group
+ * 
+ */
 WeChatPublic.prototype.createGroup = function(name) {
     var that = this;
 
@@ -369,6 +383,9 @@ WeChatPublic.prototype.createGroup = function(name) {
     }) 
 }
 
+/** fetch groups
+ * 
+ */
 WeChatPublic.prototype.fetchGroups = function() {
     var that = this;
 
@@ -392,6 +409,9 @@ WeChatPublic.prototype.fetchGroups = function() {
     }) 
 }
 
+/** check group
+ * 
+ */
 WeChatPublic.prototype.checkGroup = function(openID) {
     var that = this;
     return new Promise(function(resolve, reject) {
@@ -417,6 +437,9 @@ WeChatPublic.prototype.checkGroup = function(openID) {
     }) 
 }
 
+/** update group
+ * 
+ */
 WeChatPublic.prototype.updateGroup = function(openID, name) {
     var that = this;
     return new Promise(function(resolve, reject) {
@@ -444,6 +467,9 @@ WeChatPublic.prototype.updateGroup = function(openID, name) {
     }) 
 }
 
+/** move the group
+ * 
+ */
 WeChatPublic.prototype.moveGroup = function(openIDs, to) {
     var that = this;
     return new Promise(function(resolve, reject) {
@@ -475,6 +501,9 @@ WeChatPublic.prototype.moveGroup = function(openIDs, to) {
     }) 
 }
 
+/** delete group
+ * 
+ */
 WeChatPublic.prototype.deleteGroup = function(id) {
     var that = this;
     return new Promise(function(resolve, reject) {
@@ -501,6 +530,9 @@ WeChatPublic.prototype.deleteGroup = function(id) {
     }) 
 }
 
+/** remark users
+ * 
+ */
 WeChatPublic.prototype.remarkUser = function(openID, remark) {
     var that = this;
     return new Promise(function(resolve, reject) {
@@ -526,6 +558,9 @@ WeChatPublic.prototype.remarkUser = function(openID, remark) {
     }) 
 }
 
+/** fetch users 
+ * 
+ */
 WeChatPublic.prototype.fetchUsers = function(openIDs, lang) {
     var that = this;
     return new Promise(function(resolve, reject) {
@@ -561,6 +596,9 @@ WeChatPublic.prototype.fetchUsers = function(openIDs, lang) {
     }) 
 }
 
+/** send group
+ * 
+ */
 WeChatPublic.prototype.sendByGroup = function(type, message, groupID) {
     var that = this;
     var msg = { 
@@ -597,6 +635,9 @@ WeChatPublic.prototype.sendByGroup = function(type, message, groupID) {
     }) 
 }
 
+/** create menu
+ * 
+ */
 WeChatPulic.prototype.ceateMenu =  function(menu) {
     var that = this;
     return new Promise(function(resolve, reject) {
@@ -617,6 +658,9 @@ WeChatPulic.prototype.ceateMenu =  function(menu) {
     })
 }
 
+/** get menu
+ * 
+ */
 WeChatPulic.prototype.getMenu = function() {
     var that = this;
     return new Promise(resolve, reject) {
@@ -637,6 +681,9 @@ WeChatPulic.prototype.getMenu = function() {
     }
 })
 
+/** delete menu
+ * 
+ */
 WeChatPucluic.prototype.deleteMenu = function() {
     var that = this;
     return new Promise(resolve, reject) {

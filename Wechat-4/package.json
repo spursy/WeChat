@@ -2,7 +2,7 @@
   "name": "wechat",
   "version": "2.0.0",
   "description": "wechat develop",
-  "main": "app.js",
+  "main": "index/app.js",
   "dependencies": {
     "koa": "^2.2.0",
     "sha1": "",

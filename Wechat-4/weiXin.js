@@ -161,7 +161,10 @@ exports.reply = async function (next) {
             var msgData = await weChatApi.sendByGroup('mpnews', mpnews, 0)
             console.log(msgData)
             reply = 'Yeah!'
+         } else if (content === '16') {
+             
          }
+
          this.body = reply
     } 
     await next

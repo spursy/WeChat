@@ -9,7 +9,7 @@ const materialPath = path.join(__dirname + '../materials');
  * Add menu reference.
  */
 weChatApi.deleteMenu()
-    .then(function(data) {
+    .then(function() {
         weChatApi.ceateMenu(menu)
             .then(function(data) {
                 console.log(data);
@@ -42,8 +42,7 @@ exports.reply = async function (next) {
             this.body = '看到我扫一下哦！'
         } else if (message.Event === 'VIEW') {
             this.body = '您点击了菜单中的链接： ' +message.EventKey
-        }
-         
+        }  
     } else if (message.MsgType === 'text') {
          var content = message.Content
          var reply = '额，你说的 ' +message.Content+ '太复杂了'
